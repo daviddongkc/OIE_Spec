@@ -1,0 +1,15 @@
+.vscode
+**/__pycache__/**
+data/train.json
+data/test.json
+dump
+*.pyc
+**/._*
+**/pkl_outputs
+STDIN.*
+jobs
+.ipynb_checkpoints
+.*.swp
+trained_model
+*.tar.gz
+.idea

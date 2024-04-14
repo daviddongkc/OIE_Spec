@@ -1,0 +1,67 @@
+{
+
+    "dataset_reader": {
+        "type": "spec_bert_tup_binary_dep",
+        //roberta-base or  bert-base-uncased or electra
+        "bert_model_name": "bert-base-uncased"
+      },
+
+    "validation_dataset_reader": {
+        "type": "spec_bert_tup_binary_dep",
+        "validation": true,
+        "bert_model_name": "bert-base-uncased"
+      },
+
+    "train_data_path": "data/train.json",
+    "validation_data_path": "data/test.json",
+
+    "iterator": {
+        "type": "bucket",
+        "batch_size": 32,
+        "sorting_keys": [["tokens", "num_tokens"]]
+    },
+
+    "model": {
+        "type": "spec_bert_tup_binary_dep",
+        "embedding_dropout": 0.1,
+        "bert_model": "bert-base-uncased",
+        "tup_attention": {
+          "type": "stacked_self_attention",
+          "input_dim": 768,
+          "hidden_dim": 768,
+          "projection_dim": 256,
+          "feedforward_hidden_dim": 3072,
+          "num_layers": 2,
+          "num_attention_heads": 8
+        },
+        "tuple_metric": {
+            "output_path": "",
+            "type": "spec_match_binary",
+            "dev_set": ""}
+    },
+
+    "trainer": {
+        "optimizer": {
+            "type": "bert_adam",
+            "lr": 3e-5,
+            "t_total": -1,
+            "max_grad_norm": 1.0,
+            "weight_decay": 0.01,
+            "parameter_groups": [
+              [["bias", "LayerNorm.bias", "LayerNorm.weight", "layer_norm.weight"], {"weight_decay": 0.0}]
+            ]
+        },
+
+        "learning_rate_scheduler": {
+            "type": "slanted_triangular",
+            "num_epochs": 20,
+            "num_steps_per_epoch": 4600
+        },
+        "num_epochs": 20,
+        "validation_metric": "+binary_f1",
+        "num_serialized_models_to_keep": 1,
+        "should_log_learning_rate": true,
+        "cuda_device": 0
+    }
+
+}
