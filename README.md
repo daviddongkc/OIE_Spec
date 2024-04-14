@@ -1,7 +1,9 @@
 # From Speculation Detection to Trustworthy Relational Tuples in Information Extraction
 
 ## Introduction
-About SpecTup: we propose to study speculations in OIE tuples and determine whether a tuple is speculative. We formally define the research problem of tuple-level speculation detection. We then conduct detailed analysis on the LSOIE dataset which provides labels for speculative tuples. Lastly, we propose a baseline model SpecTup for this new research task.
+About SpecTup: we propose to study speculations in OIE tuples and determine whether a tuple is speculative. We formally define the research problem of tuple-level speculation detection. We propose a baseline model SpecTup for this new research task.
+
+The details of this work are elaborated in our paper published in [EMNLP 2023](https://aclanthology.org/2023.findings-emnlp.886/).
 
 ## SpecTup Model
 ### Installation Instructions
