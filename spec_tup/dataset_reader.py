@@ -101,16 +101,13 @@ class SrlReader(DatasetReader):
         file_in = open(file_path, 'r', encoding='utf-8')
         json_sent = json.load(file_in)
         file_in.close()
-        n = 0
+
         for sent, sent_val in json_sent.items():
             tokens = [Token(x) for x in sent_val['tokens']]
             tuples = sent_val['tuples']
             syntax_info = {'spacy_pos': sent_val['spacy_pos'], 'spacy_tag': sent_val['spacy_tag'],
                            'dep_graph_edges': sent_val['dep_graph_edges']}
 
-            n += 1
-            # if n > 1000:
-            #     continue
             if self._validation:
                 sent_spec = sent_val['sent_spec']
                 if 'sent_spec_level' in sent_val.keys():
@@ -173,7 +170,6 @@ class SrlReader(DatasetReader):
             wordpieces, offsets, start_offsets = self._wordpiece_tokenize_input(sent_tokens)
 
 
-
         new_verbs = convert_verb_indices_to_wordpiece_indices(verb_label, offsets)
         metadata_dict["offsets"] = start_offsets
         metadata_dict["end_offsets"] = offsets
@@ -202,11 +198,8 @@ class SrlReader(DatasetReader):
             tup_offset_start.append(offset_start)
             tup_offset_end.append(offset_end)
 
-
         tup_seq_field = TextField([Token(t, text_id=self._tup_tag_vocab[t]) for t in tup_seq], token_indexers=self._tup_tag_indexers)
-        # spec_mask2_field = LabelField(mask_id2, skip_indexing=True)
         fields['tup_seq'] = tup_seq_field
-        # fields['tup_mask_ids'] = spec_mask2_field
 
         metadata_dict["words"] = [x.text for x in tokens]
         metadata_dict["verb"] = verb
@@ -224,12 +217,6 @@ class SrlReader(DatasetReader):
                 if sent_spec_level is not None:
                     metadata_dict["sent_spec_level"] = sent_spec_level
 
-        # tuple_spec = tup['pred_str'].split()
-        # if len(tuple_spec) > 1:
-        #     metadata_dict["tup_spec"] = tuple_spec[0]
-        # else:
-        #     metadata_dict["tup_spec"] = 'N/A'
-
         metadata_dict["tup_spec"] = tup["tup_spec"]
 
         if self._validation is False:
@@ -238,7 +225,6 @@ class SrlReader(DatasetReader):
             if 'spec_level' in tup.keys():
                 metadata_dict["tup_spec_level"] = tup['spec_level']
                 metadata_dict["tup_spec_type"] = tup['spec_type']
-
 
         fields["metadata"] = MetadataField(metadata_dict)
         return Instance(fields)
